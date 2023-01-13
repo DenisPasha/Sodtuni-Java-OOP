@@ -1,4 +1,4 @@
-package P01Abstraction.P02PointInRectangle;
+package P01Abstraction.lab.P02PointInRectangle;
 
 import java.util.Arrays;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package P01Abstraction.P03Students;
+package P01Abstraction.lab.P03Students;
 
 public class Student {
     private String name;

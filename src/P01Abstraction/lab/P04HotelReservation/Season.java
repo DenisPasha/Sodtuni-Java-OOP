@@ -1,4 +1,4 @@
-package P01Abstraction.P04HotelReservation;
+package P01Abstraction.lab.P04HotelReservation;
 
 public enum Season {
     Spring(2),

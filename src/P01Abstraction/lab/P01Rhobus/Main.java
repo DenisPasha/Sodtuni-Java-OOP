@@ -1,4 +1,4 @@
-package P01Abstraction.P01Rhobus;
+package P01Abstraction.lab.P01Rhobus;
 
 import java.util.Scanner;
 

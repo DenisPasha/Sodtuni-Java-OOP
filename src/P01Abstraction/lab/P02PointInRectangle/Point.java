@@ -1,4 +1,4 @@
-package P01Abstraction.P02PointInRectangle;
+package P01Abstraction.lab.P02PointInRectangle;
 
 public class Point {
     private int x;
