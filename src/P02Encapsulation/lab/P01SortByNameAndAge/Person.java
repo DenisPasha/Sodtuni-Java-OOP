@@ -1,11 +1,6 @@
-package P02Encapsulation.lab;
+package P02Encapsulation.lab.P01SortByNameAndAge;
 
 public class Person {
-
-    //•	firstName: String
-    //•	lastName: String
-    //•	age: int
-    //•	toString() - override
     private String firstName;
     private  String lastName;
     private  int age;
@@ -14,6 +9,18 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getAge() {
+        return age;
     }
 
     @Override
