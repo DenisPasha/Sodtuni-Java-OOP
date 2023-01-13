@@ -28,4 +28,3 @@ public class Person {
         return String.format("%s %s is %d years old.",this.firstName,this.lastName,this.age);
     }
 }
-
