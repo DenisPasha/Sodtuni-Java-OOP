@@ -31,8 +31,8 @@ public class Main {
 
             }else {
                 //name} {birthdate}"
-                String name = inputArr[1];
-                String birthDate = inputArr[2];
+                String name = inputArr[0];
+                String birthDate = inputArr[1];
                 Pet pet = new Pet(name,birthDate);
                 list.add(pet);
 
