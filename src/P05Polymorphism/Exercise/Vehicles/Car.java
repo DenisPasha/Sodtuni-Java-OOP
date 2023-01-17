@@ -1,4 +1,4 @@
-package Vehicles;
+package P05Polymorphism.Exercise.Vehicles;
 
 import java.text.DecimalFormat;
 
@@ -6,13 +6,10 @@ public class Car extends BaseVehicle{
 
     private static final double FUEL_CONSUMPTION_INCREASE = 0.9;
 
-
-    public Car(double fuelQuantity, double consumption) {
-        super(fuelQuantity, consumption);
+    public Car(double fuelQuantity, double consumption, double tankCapacity) {
+        super(fuelQuantity, consumption, tankCapacity);
         super.setConsumption(this.getConsumption() + FUEL_CONSUMPTION_INCREASE);
     }
-
-
 
 
     @Override
@@ -30,7 +27,18 @@ public class Car extends BaseVehicle{
 
     @Override
     public void refuel(double litres) {
-        double result = this.getFuelQuantity() + litres ;
-        this.setFuelQuantity(result);
+        if (litres <= 0){
+            System.out.println("Fuel must be a positive number");
+        }else {
+            double result = this.getFuelQuantity() + litres;
+            if (result > this.getTankCapacity()){
+                System.out.println("Cannot fit fuel in tank");
+            }else {
+                this.setFuelQuantity(result);
+            }
+
+
+        }
+
     }
 }

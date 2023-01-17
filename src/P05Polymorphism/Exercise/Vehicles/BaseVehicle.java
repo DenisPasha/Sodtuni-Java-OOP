@@ -1,13 +1,24 @@
-package Vehicles;
+package P05Polymorphism.Exercise.Vehicles;
 
 public abstract class BaseVehicle {
 
     private double fuelQuantity;
     private double consumption;
 
-    public BaseVehicle(double fuelQuantity, double consumption) {
+    private double tankCapacity;
+
+    public BaseVehicle(double fuelQuantity, double consumption,double tankCapacity) {
         this.fuelQuantity = fuelQuantity;
         this.consumption = consumption;
+        this.tankCapacity = tankCapacity;
+    }
+
+    public double getTankCapacity() {
+        return tankCapacity;
+    }
+
+    public void setTankCapacity(double tankCapacity) {
+        this.tankCapacity = tankCapacity;
     }
 
     public double getFuelQuantity() {
