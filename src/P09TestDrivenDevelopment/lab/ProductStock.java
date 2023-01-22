@@ -1,6 +1,4 @@
-package P09TestDrivenDevelopment;
-
-import java.util.List;
+package P09TestDrivenDevelopment.lab;
 
 public interface ProductStock extends Iterable<Product> {
 

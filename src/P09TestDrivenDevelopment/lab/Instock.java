@@ -1,4 +1,4 @@
-package P09TestDrivenDevelopment;
+package P09TestDrivenDevelopment.lab;
 
 import java.util.*;
 import java.util.stream.Collectors;

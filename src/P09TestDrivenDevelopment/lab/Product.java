@@ -1,4 +1,4 @@
-package P09TestDrivenDevelopment;
+package P09TestDrivenDevelopment.lab;
 
 public class Product implements Comparable<Product> {
 
