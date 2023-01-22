@@ -4,6 +4,10 @@ import net.bytebuddy.agent.builder.AgentBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class ChainblockImplTest {
 
     ChainblockImpl chainblock;
@@ -126,7 +130,71 @@ public class ChainblockImplTest {
         chainblock.getByTransactionStatus(TransactionStatus.ABORTED);
     }
 
+    @Test
+    public void testGetAllSendersWithTransactionStatusValid(){
+        addTransactionsToChainblock();
+        Transaction transaction = new TransactionImpl(3,TransactionStatus.FAILED,"Sam","someone",5);
+        Transaction transaction1 = new TransactionImpl(4,TransactionStatus.FAILED,"Adam","moione",2);
+        Transaction transaction2 = new TransactionImpl(5,TransactionStatus.FAILED,"Sam","daadadadada",6);
+        chainblock.add(transaction);
+        chainblock.add(transaction1);
+        chainblock.add(transaction2);
 
+
+        List<String> expectedList = new ArrayList<>();
+        expectedList.add("Adam");
+        expectedList.add("Sam");
+        expectedList.add("Sam");
+
+        Iterable<String> allSendersWithTransactionStatus = chainblock.getAllSendersWithTransactionStatus(TransactionStatus.FAILED);
+
+
+        List<String> givenList = new ArrayList<>();
+
+        int count = 0;
+        for (String person : allSendersWithTransactionStatus){
+            givenList.add(person);
+            count++;
+        }
+
+        Assert.assertEquals(3,count);
+        Assert.assertEquals(expectedList,givenList);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetAllSendersWithTransactionInvalidStatus(){
+        addTransactionsToChainblock();
+        chainblock.getAllSendersWithTransactionStatus(TransactionStatus.ABORTED);
+    }
+
+    @Test
+    public void testGetAllReceiversWithTransactionValidStatus(){
+        Transaction transaction = new TransactionImpl(1,TransactionStatus.FAILED,"da","Denis",21);
+        Transaction transaction1 = new TransactionImpl(1,TransactionStatus.FAILED,"da","Denis",20);
+        Transaction transaction2 = new TransactionImpl(1,TransactionStatus.FAILED,"da","Pesho",200);
+
+        addTransactionsToChainblock();
+        chainblock.add(transaction);
+        chainblock.add(transaction1);
+        chainblock.add(transaction2);
+
+        Iterable<String> allReceiversIter = chainblock.getAllReceiversWithTransactionStatus(TransactionStatus.SUCCESSFUL);
+
+        int count = 0;
+        List<String> receiversNames = new ArrayList<>();
+        List<String>expectedNames = new ArrayList<>();
+        expectedNames.add("men");
+        expectedNames.add("men");
+
+        for (String receiverName : allReceiversIter){
+            receiversNames.add(receiverName);
+            count++;
+        }
+
+        Assert.assertEquals(2,count);
+        Assert.assertEquals(expectedNames,receiversNames);
+
+    }
 
 
 

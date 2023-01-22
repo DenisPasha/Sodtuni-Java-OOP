@@ -25,6 +25,10 @@ public class TransactionImpl implements Transaction{
         return id;
     }
 
+    public String getTo() {
+        return to;
+    }
+
     public double getAmount() {
         return amount;
     }
@@ -36,4 +40,9 @@ public class TransactionImpl implements Transaction{
     public TransactionStatus getStatus() {
         return status;
     }
+
+    public String getFrom() {
+        return from;
+    }
+
 }

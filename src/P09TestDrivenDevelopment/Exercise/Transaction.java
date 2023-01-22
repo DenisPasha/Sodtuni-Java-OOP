@@ -6,4 +6,6 @@ public interface Transaction {
    TransactionStatus getStatus();
 
     double getAmount();
+    String getFrom();
+    String getTo();
 }

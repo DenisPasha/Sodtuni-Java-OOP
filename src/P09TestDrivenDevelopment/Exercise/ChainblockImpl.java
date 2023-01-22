@@ -81,11 +81,42 @@ public class ChainblockImpl implements Chainblock{
     }
 
     public Iterable<String> getAllSendersWithTransactionStatus(TransactionStatus status) {
-        return null;
+        List<Transaction>transactionsList = new ArrayList<>();
+        List<String>personsList = new ArrayList<>();
+        for (Map.Entry<Integer, Transaction> entry : transactionMap.entrySet()) {
+            Transaction value = entry.getValue();
+            if (value.getStatus().equals(status)){
+               transactionsList.add(value);
+           }
+        }
+
+        transactionsList.sort(Comparator.comparing(Transaction::getAmount));
+        transactionsList.forEach(transaction -> personsList.add(transaction.getFrom()));
+        if (personsList.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        return personsList;
+
     }
 
     public Iterable<String> getAllReceiversWithTransactionStatus(TransactionStatus status) {
-        return null;
+        List<Transaction>transactionList = new ArrayList<>();
+        List<String>namesList = new ArrayList<>();
+        for (Map.Entry<Integer, Transaction> entry : transactionMap.entrySet()) {
+            Transaction currentTransaction = entry.getValue();
+            if (currentTransaction.getStatus().equals(status)){
+                transactionList.add(currentTransaction);
+            }
+        }
+
+        transactionList.sort(Comparator.comparing(Transaction::getAmount));
+        transactionList.forEach(transaction -> namesList.add(transaction.getTo()));
+
+        if (namesList.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        return namesList;
+
     }
 
     public Iterable<Transaction> getAllOrderedByAmountDescendingThenById() {
