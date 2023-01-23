@@ -1,6 +1,8 @@
 package P09TestDrivenDevelopment.Exercise;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ChainblockImpl implements Chainblock{
 
@@ -120,19 +122,49 @@ public class ChainblockImpl implements Chainblock{
     }
 
     public Iterable<Transaction> getAllOrderedByAmountDescendingThenById() {
-        return null;
+        List<Transaction> collect = transactionMap.values().stream()
+                .sorted(Comparator.comparing(Transaction::getAmount)
+                        .thenComparing(Transaction::getId)).collect(Collectors.toList());
+        System.out.println();
+        return collect;
     }
 
+
+
     public Iterable<Transaction> getBySenderOrderedByAmountDescending(String sender) {
-        return null;
+        List<Transaction> collect = transactionMap.values().stream().
+                filter(transaction -> transaction.getFrom().equals(sender))
+                .collect(Collectors.toList());
+        collect.stream().sorted(Comparator.comparing(Transaction::getAmount).reversed());
+        if (!collect.isEmpty()){
+            return collect;
+        }else {
+            throw new IllegalArgumentException();
+        }
+
     }
 
     public Iterable<Transaction> getByReceiverOrderedByAmountThenById(String receiver) {
-        return null;
+        List<Transaction> collect = transactionMap.values().stream().filter(transaction -> transaction.getTo().equals(receiver))
+                .sorted(Comparator.comparing(Transaction::getAmount).
+                        thenComparing(Transaction::getId)).collect(Collectors.toList());
+        if (!collect.isEmpty()){
+            return collect;
+        }else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Iterable<Transaction> getByTransactionStatusAndMaximumAmount(TransactionStatus status, double amount) {
-        return null;
+        List<Transaction> collect = transactionMap.values().stream().filter(transaction -> transaction.getStatus().equals(status))
+                .filter(transaction -> transaction.getAmount() <= amount)
+                .sorted(Comparator.comparing(Transaction::getAmount))
+                .collect(Collectors.toList());
+        if (!collect.isEmpty()){
+            return collect;
+        }else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Iterable<Transaction> getBySenderAndMinimumAmountDescending(String sender, double amount) {

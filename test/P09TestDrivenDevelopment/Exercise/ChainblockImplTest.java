@@ -13,12 +13,14 @@ public class ChainblockImplTest {
     ChainblockImpl chainblock;
 
     private void addTransactionsToChainblock(){
-        Transaction transaction = new TransactionImpl(1,TransactionStatus.SUCCESSFUL,"dem","men",231);
-        Transaction transaction1 = new TransactionImpl(2,TransactionStatus.SUCCESSFUL,"dem","men",21);
+        Transaction transaction = new TransactionImpl(1,TransactionStatus.SUCCESSFUL,"Pasha","men",231);
+        Transaction transaction1 = new TransactionImpl(2,TransactionStatus.SUCCESSFUL,"denis","men",21);
+        Transaction transaction2 = new TransactionImpl(3,TransactionStatus.SUCCESSFUL,"denis","men",20);
 
          chainblock = new ChainblockImpl();
         chainblock.getTransactionMap().put(transaction.getId(),transaction);
         chainblock.getTransactionMap().put(transaction1.getId(),transaction1);
+      //  chainblock.getTransactionMap().put(transaction2.getId(),transaction2);
     }
 
     @Test
@@ -193,7 +195,106 @@ public class ChainblockImplTest {
 
         Assert.assertEquals(2,count);
         Assert.assertEquals(expectedNames,receiversNames);
+    }
+    @Test (expected = IllegalArgumentException.class)
+    public void testGetAllReceiversWithTransactionInvalidStatus(){
 
+        addTransactionsToChainblock();
+        chainblock.getAllReceiversWithTransactionStatus(TransactionStatus.FAILED);
+    }
+
+    @Test
+    public void testgetAllOrderedByAmountDescendingThenById(){
+
+        addTransactionsToChainblock();
+        Iterable<Transaction> orderedByAmountAndID = chainblock.getAllOrderedByAmountDescendingThenById();
+
+        List<Transaction> ordered = new ArrayList<>();
+
+        for (Transaction transaction : orderedByAmountAndID){
+            ordered.add(transaction);
+        }
+        int size = ordered.size();
+        Transaction transaction = ordered.get(0);
+        Transaction given = ordered.get(0);
+
+        Transaction transaction1 = new TransactionImpl(1,TransactionStatus.SUCCESSFUL,"Pasha","men",231);
+        TransactionImpl expected = new TransactionImpl(2, TransactionStatus.SUCCESSFUL, "denis", "men", 21);
+
+        System.out.println();
+        Assert.assertEquals(2,size);
+        Assert.assertEquals(expected.getId(),given.getId());
+    }
+
+    @Test
+   public void testGetBySenderOrderedByAmountDescendingWithValidData(){
+        addTransactionsToChainblock();
+        Transaction expected1 = new TransactionImpl(2,TransactionStatus.SUCCESSFUL,"denis","men",21);
+        Transaction expected2 = new TransactionImpl(3,TransactionStatus.SUCCESSFUL,"denis","men",20);
+        chainblock.getTransactionMap().put(expected2.getId(),expected2);
+
+        Iterable<Transaction> denis = chainblock.getBySenderOrderedByAmountDescending("denis");
+        int count = 0;
+        List<Transaction> givenList = new ArrayList<>();
+        for (Transaction transaction : denis){
+            givenList.add(transaction);
+            count++;
+        }
+        Assert.assertEquals(2,count);
+        Assert.assertEquals(expected1.getAmount(),givenList.get(0).getAmount(),21);
+        Assert.assertEquals(expected2.getId(),givenList.get(1).getId());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testGetBySenderOrderedByAmountDescendingWithInvalidData(){
+        addTransactionsToChainblock();
+        chainblock.getBySenderOrderedByAmountDescending("papa");
+    }
+
+    @Test
+   public void testGetByReceiverOrderedByAmountThenByIdValidInput(){
+        addTransactionsToChainblock();
+        Transaction expected2 = new TransactionImpl(3,TransactionStatus.SUCCESSFUL,"denis","men",20);
+        chainblock.getTransactionMap().put(expected2.getId(),expected2);
+
+        Iterable<Transaction> men = chainblock.getByReceiverOrderedByAmountThenById("men");
+        int count = 0;
+        List<Transaction> given = new ArrayList<>();
+        for (Transaction transaction : men){
+            count++;
+            given.add(transaction);
+        }
+        Assert.assertEquals(3,count);
+        Assert.assertEquals(expected2.getId(),given.get(0).getId());
+    }
+    @Test (expected = IllegalArgumentException.class)
+    public void testGetByReceiverOrderedByAmountThenByIdInvalidInput(){
+        addTransactionsToChainblock();
+        chainblock.getByReceiverOrderedByAmountThenById("dadada");
+    }
+
+    @Test
+    public void testGetByTransactionStatusAndMaximumAmountValid(){
+        addTransactionsToChainblock();
+        Transaction expected2 = new TransactionImpl(3,TransactionStatus.SUCCESSFUL,"denis","men",20);
+        chainblock.getTransactionMap().put(expected2.getId(),expected2);
+
+        Iterable<Transaction> byTransactionStatusAndMaximumAmount = chainblock.getByTransactionStatusAndMaximumAmount(TransactionStatus.SUCCESSFUL, 21);
+
+        int count = 0;
+        List<Transaction> given = new ArrayList<>();
+        for (Transaction transaction : byTransactionStatusAndMaximumAmount){
+            count++;
+            given.add(transaction);
+        }
+        Assert.assertEquals(2,count);
+        Assert.assertEquals(expected2.getId(),given.get(0).getId());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testGetByTransactionStatusAndMaximumAmountInvalidData(){
+        addTransactionsToChainblock();
+        chainblock.getByTransactionStatusAndMaximumAmount(TransactionStatus.UNAUTHORIZED,2121);
     }
 
 
