@@ -320,8 +320,49 @@ public class ChainblockImplTest {
     public void testGetBySenderAndMinimumAmountDescendingInvalid(){
         addTransactionsToChainblock();
         chainblock.getBySenderAndMinimumAmountDescending("aaa",2);
-
     }
 
+    @Test
+    public void testGetByReceiverAndAmountRangeValid(){
+        addTransactionsToChainblock();
+        Transaction expected2 = new TransactionImpl(3,TransactionStatus.SUCCESSFUL,"denis","men",20);
+        chainblock.getTransactionMap().put(expected2.getId(),expected2);
+
+        Iterable<Transaction> given = chainblock.getByReceiverAndAmountRange("men", 20, 22);
+        List<Transaction>givenList = new ArrayList<>();
+        for (Transaction transaction : given){
+            givenList.add(transaction);
+        }
+
+        Assert.assertEquals(2,givenList.size());
+        Assert.assertEquals(20,givenList.get(1).getAmount(),20);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testGetByReceiverAndAmountRangeInvalid(){
+        addTransactionsToChainblock();
+        chainblock.getByReceiverAndAmountRange("aaaaa",2,21);
+    }
+
+    @Test
+    public void testGetAllInAmountRangeValid(){
+        addTransactionsToChainblock();
+        Transaction expected2 = new TransactionImpl(3,TransactionStatus.SUCCESSFUL,"denis","men",20);
+        chainblock.getTransactionMap().put(expected2.getId(),expected2);
+
+        Iterable<Transaction> allInAmountRange = chainblock.getAllInAmountRange(19, 30);
+        List<Transaction> list = new ArrayList<>();
+        for (Transaction transaction : allInAmountRange){
+            list.add(transaction);
+        }
+        Assert.assertEquals(2,list.size());
+        Assert.assertEquals(21,list.get(0).getAmount(),21);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testGetAllInRangeInvalid(){
+        addTransactionsToChainblock();
+        chainblock.getAllInAmountRange(1111,2112);
+    }
 
 }

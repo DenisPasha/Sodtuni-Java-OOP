@@ -180,11 +180,25 @@ public class ChainblockImpl implements Chainblock{
     }
 
     public Iterable<Transaction> getByReceiverAndAmountRange(String receiver, double lo, double hi) {
-        return null;
+        List<Transaction> collect = transactionMap.values().stream().filter(transaction -> transaction.getTo().equals(receiver))
+                .filter(transaction -> transaction.getAmount() >= lo && transaction.getAmount() < hi)
+                .sorted(Comparator.comparing(Transaction::getAmount).reversed().thenComparing(Transaction::getId))
+                .collect(Collectors.toList());
+        if (!collect.isEmpty()){
+            return collect;
+        }else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Iterable<Transaction> getAllInAmountRange(double lo, double hi) {
-        return null;
+        List<Transaction> collect = transactionMap.values().stream().filter(transaction -> transaction.getAmount() >= lo && transaction.getAmount() <= hi)
+                .collect(Collectors.toList());
+        if (!collect.isEmpty()){
+            return collect;
+        }else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Iterator<Transaction> iterator() {
