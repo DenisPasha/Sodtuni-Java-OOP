@@ -168,7 +168,15 @@ public class ChainblockImpl implements Chainblock{
     }
 
     public Iterable<Transaction> getBySenderAndMinimumAmountDescending(String sender, double amount) {
-        return null;
+        List<Transaction> collect = transactionMap.values().stream().filter(transaction -> transaction.getFrom().equals(sender))
+                .filter(transaction -> transaction.getAmount() > amount)
+                .sorted(Comparator.comparing(Transaction::getAmount).reversed())
+                .collect(Collectors.toList());
+        if (!collect.isEmpty()){
+            return collect;
+        }else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Iterable<Transaction> getByReceiverAndAmountRange(String receiver, double lo, double hi) {

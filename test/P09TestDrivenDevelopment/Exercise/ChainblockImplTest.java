@@ -297,7 +297,31 @@ public class ChainblockImplTest {
         chainblock.getByTransactionStatusAndMaximumAmount(TransactionStatus.UNAUTHORIZED,2121);
     }
 
+    @Test
+    public void testGetBySenderAndMinimumAmountDescendingValid(){
+        addTransactionsToChainblock();
+        Transaction expected2 = new TransactionImpl(3,TransactionStatus.SUCCESSFUL,"denis","men",20);
+        chainblock.getTransactionMap().put(expected2.getId(),expected2);
 
+        Iterable<Transaction> receivedList = chainblock.getBySenderAndMinimumAmountDescending("denis", 16);
+        int count = 0;
+        List<Transaction> transactionList = new ArrayList<>();
+        for (Transaction transaction : receivedList){
+            transactionList.add(transaction);
+            count++;
+        }
+
+        Assert.assertEquals(2,count);
+        Assert.assertEquals(expected2.getId(),transactionList.get(1).getId());
+
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testGetBySenderAndMinimumAmountDescendingInvalid(){
+        addTransactionsToChainblock();
+        chainblock.getBySenderAndMinimumAmountDescending("aaa",2);
+
+    }
 
 
 }
